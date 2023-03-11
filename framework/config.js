@@ -1,4 +1,5 @@
 const config = {
+    BASE_URL: 'https://authenticationtest.com/',
     credentials: {
         simpleEmail: 'simpleForm@authenticationtest.com',
         complexEmail: 'complex@authenticationtest.com',

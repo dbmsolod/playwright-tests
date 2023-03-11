@@ -108,3 +108,5 @@ dist
 /test-results/
 /playwright-report/
 /playwright/.cache/
+.gitignore
+.DS_Store

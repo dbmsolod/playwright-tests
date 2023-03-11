@@ -1,10 +1,10 @@
-import config from '../framework/config';
-
-const playwright = require('playwright');
-const chai = require('chai')
+import playwright from 'playwright'
+import chai from 'chai'
 const expect = chai.expect
 
-const BASE_URL = 'https://authenticationtest.com/';
+import config from '../framework/config.js'
+const cred = config.credentials;
+
 const someText = 'some text';
 
 let page, browser, context
@@ -47,7 +47,7 @@ describe('e2e-tests for authenticationtest.com', () => {
     });
       
     context = await browser.newContext()
-    page = await context.newPage(BASE_URL + 'complexAuth/')
+    page = await context.newPage(config.BASE_URL + 'complexAuth/')
   })
 
   afterEach(async function() {
@@ -56,19 +56,16 @@ describe('e2e-tests for authenticationtest.com', () => {
   })
 
   it('Main page exists', async() => {
-    await page.goto(BASE_URL);
+    await page.goto(config.BASE_URL);
     
     const title = await page.title()
     expect(title).to.equal('Authentication Test')
   })
 
+  it('Successful authentication with select and checkbox', async() => {
+    await page.goto(config.BASE_URL + 'complexAuth/');
 
-
-
-  it.only('Successful authentication with select and checkbox', async() => {
-    await page.goto(BASE_URL + 'complexAuth/');
-
-    await authEmailAndPassFill(config.credentials.complexEmail, config.credentials.password);
+    await authEmailAndPassFill(cred.complexEmail, cred.password);
     await page.locator(selectorsAuth.loginSelect).selectOption('yes');
     await page.locator(selectorsAuth.checkboxLoveManipulation).check();
 
@@ -78,16 +75,10 @@ describe('e2e-tests for authenticationtest.com', () => {
     await checkAuthSuccessPage();
   })
 
-
-
-
-
-
-
   it('Successful interactive authentication with captcha', async() => {
-    await page.goto(BASE_URL + 'bootstrapAuth/');
+    await page.goto(config.BASE_URL + 'bootstrapAuth/');
 
-    await authEmailAndPassFill(credentials.captchaEmail, credentials.password);
+    await authEmailAndPassFill(cred.captchaEmail, cred.password);
 
     const captchaValue = await page.locator(selectorsAuth.captchaValue).textContent();
     await page.locator(selectorsAuth.captchaInput).fill(captchaValue);
@@ -99,9 +90,9 @@ describe('e2e-tests for authenticationtest.com', () => {
   })
 
   it('Sign in & Sign Out', async() => {
-    await page.goto(BASE_URL + 'simpleFormAuth/');
+    await page.goto(config.BASE_URL + 'simpleFormAuth/');
 
-    await authEmailAndPassFill(credentials.simpleEmail, credentials.password);
+    await authEmailAndPassFill(cred.simpleEmail, cred.password);
     await page.click(selectorsAuth.loginBtn);
     await page.waitForLoadState('networkidle');
 
@@ -114,7 +105,7 @@ describe('e2e-tests for authenticationtest.com', () => {
   })
 
   it('Save text in "Recent searches" block on XSS Demo page', async() => {
-    await page.goto(BASE_URL + 'xssDemo/');
+    await page.goto(config.BASE_URL + 'xssDemo/');
 
     await page.locator(selectorsXSS.searchInput).fill(someText);
     await page.click(selectorsXSS.searchBtn);

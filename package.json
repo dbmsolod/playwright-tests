@@ -3,6 +3,7 @@
   "description": "Playwrigth example",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.31.2"
   },
